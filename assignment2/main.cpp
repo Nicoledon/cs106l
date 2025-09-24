@@ -11,10 +11,11 @@
 #include <iostream>
 #include <queue>
 #include <set>
+#include <sstream>
 #include <string>
 #include <unordered_set>
 
-std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
+std::string kYourName = "Jeff Tang"; // Don't forget to change this!
 
 /**
  * Takes in a file name and returns a set containing all of the applicant names as a set.
@@ -29,6 +30,17 @@ std::string kYourName = "STUDENT TODO"; // Don't forget to change this!
  */
 std::set<std::string> get_applicants(std::string filename) {
   // STUDENT TODO: Implement this function.
+   std::set<std::string>names; 
+   std::ifstream file(filename);
+   if(!file.is_open()){
+      std::cerr << "error to open the file" << "\n";
+      exit(1);
+   }
+   std::string line;
+   while(std::getline(file,line)){
+        names.insert(line);
+   }
+   return names;
 }
 
 /**
@@ -41,6 +53,21 @@ std::set<std::string> get_applicants(std::string filename) {
  */
 std::queue<const std::string*> find_matches(std::string name, std::set<std::string>& students) {
   // STUDENT TODO: Implement this function.
+  std::queue<const std::string *> matches_name;
+  std::string kfirstname, klastname;
+  std::stringstream ss(kYourName);
+  ss >> kfirstname >> klastname;
+  std::string firstname, lastname;
+  for(auto it = students.begin() ; it != students.end() ; it ++){
+      auto str = *it;
+      std::stringstream ss(str);
+      ss >> firstname >> lastname;
+      if(firstname[0] == kfirstname[0] && lastname[0] == klastname[0]){
+        std::cout << "str: " << str << " name: " << name <<std::endl; 
+        matches_name.push(&*it);
+      }
+  }
+  return matches_name;
 }
 
 /**
@@ -55,6 +82,10 @@ std::queue<const std::string*> find_matches(std::string name, std::set<std::stri
  */
 std::string get_match(std::queue<const std::string*>& matches) {
   // STUDENT TODO: Implement this function.
+  if (matches.size() == 0) {
+      return "NO MATCHES FOUND";
+  }
+  return *(matches.front());
 }
 
 /* #### Please don't remove this line! #### */
